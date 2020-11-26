@@ -1,0 +1,47 @@
+
+HC-12 433MHz Wireless Serial Remote Modul
+-----------------------------------------
+
+VCC - +5V
+GND - GND
+RXD - Arduino TX, Nano: D1, Mega: D18 (TXD1)
+TXD - Arduino RX, Nano: DO, Mega: D19 (RXD2)
+
+
+Display 2004A
+-------------
+
+VCC - +5V
+GND - GND
+SDA - Nano: A4, Mega: D20
+SCL - Nano: A5, Mega: D21
+
+
+4x5 Keypad
+----------
+
+Arduino D2 ... D10 -> see Pinout
+
+
+Rotary Encoder
+--------------
+
+!--- use only this pins ---!
+CLK     Nano/Mega: A0, Kondensator 100nF gegen GND	
+DATA   	Nano/Mega: A1, Kondensator 100nF gegen GND
+Button  Nano/Mega: A2
+
+middle Pin Encoder + 2. Button Pin: GND
+
+
+SD Card - only Mega
+-------------------
+
+VCC  - +5V
+GND  - GND
+MOSI - D51
+MISO - D50
+CLK  - D52
+CS   - D53
+
+ 
