@@ -151,8 +151,11 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
 
       case 'r':   // return from CV Prog
         if (params == 4) {
-          switch (p[1]) {
-            case CB_READ_BYTE:
+          if (p[0] != DEVICE_ID) break;
+          int tmp_CB_VAR = p[1];
+          bitWrite(tmp_CB_VAR, CB_READ_BYTE, 0);
+          bitWrite(tmp_CB_VAR, CB_WRITE_BYTE, 0);
+          if (bitRead(p[1], CB_READ_BYTE) == 1) {
               // < r CALLBACKNUM|CALLBACKSUB|CV VALUE>
               if (p[3] == -1) {
                 updateCVMsg("R:Err");
@@ -161,13 +164,13 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
 
                 String(CVVal).toCharArray(CVValArr, sizeof(CVValArr));
                 if (CVPROG) {
-                  if (p[0] == CB_NUM_GETADDR) {
+                  if (tmp_CB_VAR == CB_NUM_GETADDR) {
                     //read decoder adress
                     if (GetDecoderAddr(p[2],p[3])) return;
-                  } else if (p[0] == CB_NUM_SETADDR) {
+                  } else if (tmp_CB_VAR == CB_NUM_SETADDR) {
                     //read decoder adress
                     if (SetDecoderAddr(p[2] * 10,p[3])) return;
-                  } else if (p[0] == CB_NUM_GETINFO) {
+                  } else if (tmp_CB_VAR == CB_NUM_GETINFO) {
                     //read decoder info
                     #if (defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560))
                       if (GetDecoderInfo(p[2],p[3])) return;
@@ -186,18 +189,17 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
               lastCV = millis();
               lastDatas = DataTimeout + millis(); // dont get other datas
               return;
-
-            case CB_WRITE_BYTE: // write and verify
+           } else if (bitRead(p[1], CB_WRITE_BYTE) == 1) {
               // < r CALLBACKNUM|CALLBACKSUB|CV VALUE>
               if (!CVPROG) break;
               if (p[3] == -1) {
                 updateCVMsg("W:Err");
               } else {
-                if (p[0] == CB_NUM_SETADDR) {
+                if (tmp_CB_VAR == CB_NUM_SETADDR) {
                   //read decoder adress
                   // if return == true, Address was read
                   if (SetDecoderAddr(p[2],p[3])) return;                
-                } else if (p[0] == CB_NUM_GETINFO) {
+                } else if (tmp_CB_VAR == CB_NUM_GETINFO) {
                   //read decoder info -> ESU must write
                   #if (defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560))
                     if (GetDecoderInfo(p[2],p[3])) return;
@@ -215,8 +217,7 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
               lastCV = millis();
               lastDatas = DataTimeout + millis(); // dont get other datas
               return;
-            
-          }
+           }
         }
         break;
         

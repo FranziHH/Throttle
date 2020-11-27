@@ -209,13 +209,15 @@ void loop_prog_key() {
       
     case 'A': //F1
       if (CVPROGMODE == 0) {
+        int tmp_CB_VAR = CB_NUM_DEFAULT;
+        bitWrite(tmp_CB_VAR, CB_READ_BYTE, 1);
         updateCVMsg("Read");
         mySerial.print("<R ");
         mySerial.print(CVNumber);
         mySerial.print(" ");
-        mySerial.print(CB_NUM);
+        mySerial.print(DEVICE_ID);
         mySerial.print(" ");
-        mySerial.print(CB_READ_BYTE);
+        mySerial.print(tmp_CB_VAR);
         mySerial.print(">");
         lastCV = millis();
         lastDatas = DataTimeout + millis(); // dont get other datas
@@ -235,14 +237,16 @@ void loop_prog_key() {
       if (CVPROGMODE == 3) break;
       updateCVMsg("Write");
       if (CVPROGMODE == 0) {
+        int tmp_CB_VAR = CB_NUM_DEFAULT;
+        bitWrite(tmp_CB_VAR, CB_WRITE_BYTE, 1);
         mySerial.print("<W ");
         mySerial.print(CVNumber);
         mySerial.print(" ");
         mySerial.print(CVVal);
         mySerial.print(" ");
-        mySerial.print(CB_NUM);
+        mySerial.print(DEVICE_ID);
         mySerial.print(" ");
-        mySerial.print(CB_WRITE_BYTE);
+        mySerial.print(tmp_CB_VAR);
         mySerial.print(">");
         CVSend = 1;
         lastCV = millis();

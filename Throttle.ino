@@ -6,11 +6,14 @@
   Date 6th August 2020.
 
   Changes by Franziska Walter
-  2020-11-21
-  v2.2.4FW
+  2020-11-27
+  v2.2.5FW
 */
-#define VERSION "2.2.4FW"
-#define VDATE "2020-11-21"
+#define VERSION "2.2.5FW"
+#define VDATE "2020-11-27"
+
+#define DEVICE_ID 1     // Callback Id  -> each Device need other ID
+#define I2C_ADDR   0x27 // or 0x3F
 
 #include "Arduino.h"
 #include <EEPROM.h>
@@ -22,6 +25,10 @@
 // Rotary encoder Pins
 #if (defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560))
   //Mega
+  // overwrite defines ...
+  #define DEVICE_ID 2     // Callback Id 
+  #define I2C_ADDR   0x3F
+  
   #include <SPI.h>
   #include <SD.h>
   
@@ -42,6 +49,10 @@
   char ExtFile[19];
 #else
   //Nano or Uno
+  // overwrite defines ...
+  #define DEVICE_ID 1     // Callback Id 
+  #define I2C_ADDR   0x27 //0x3F
+  
   #define mySerial Serial
 #endif
 bool isSDCARD = false;
@@ -64,7 +75,7 @@ unsigned long PushKeyTimeout = 100;
 // Display I2C Address, use i2c_scanner, find out Address
 // Pins on Arduino Nano: A4 = SDA, A5 = SCL
 // Arduino Mega: D20 = SDA, D21 = SCL
-#define I2C_ADDR   0x27 //0x3F
+// #define I2C_ADDR   0x27 //0x3F
 
 
 #define debug 0           // set to 1 to show debug info on serial port - assume that it will cause issues with DCC++ depending on what is sent
@@ -131,12 +142,12 @@ bool DecoderLong = false; //Long/Short
 bool DecoderSpeedStep = true; // 14 <-> 28/126
 
 // Prog Callbacks here defined
-const int CB_NUM = 3345;
-const int CB_NUM_GETADDR = 3346;   //GetAddress
-const int CB_NUM_SETADDR = 3347;   //SetAddress
-const int CB_NUM_GETINFO = 3348;   //Get Decoder Info
-const int CB_READ_BYTE = 73401;
-const int CB_WRITE_BYTE = 73402;
+const int CB_NUM_DEFAULT = 1;
+const int CB_NUM_GETADDR = 2;   //GetAddress
+const int CB_NUM_SETADDR = 3;   //SetAddress
+const int CB_NUM_GETINFO = 4;   //Get Decoder Info
+const int CB_READ_BYTE = 10;    // Bit 10 is set
+const int CB_WRITE_BYTE = 11;   // Bit 11 is set
 
 unsigned long lastDatas = millis();
 unsigned long DataTimeout = 1000;

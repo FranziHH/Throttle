@@ -56,13 +56,15 @@ bool GetDecoderAddr(int CVNr, int CVVal) {
     }
 
     if (NextNr > 0) {
+      int tmp_CB_VAR = CB_NUM_GETADDR;
+      bitWrite(tmp_CB_VAR, CB_READ_BYTE, 1);
       updateCVMsg("Read");
       mySerial.print("<R ");
       mySerial.print(NextNr);
       mySerial.print(" ");
-      mySerial.print(CB_NUM_GETADDR);
+      mySerial.print(DEVICE_ID);
       mySerial.print(" ");
-      mySerial.print(CB_READ_BYTE);
+      mySerial.print(tmp_CB_VAR);
       mySerial.print(">");
       lastCV = millis();
       lastDatas = DataTimeout + millis(); // dont get other datas
@@ -135,6 +137,7 @@ bool SetDecoderAddr(int CVNr, int CVVal) {
     }
 
     if (NextNr > 0) {
+      int tmp_CB_VAR = CB_NUM_SETADDR;
       if (!flgWrite) {
         updateCVMsg("Read");
         mySerial.print("<R ");
@@ -148,10 +151,11 @@ bool SetDecoderAddr(int CVNr, int CVVal) {
         mySerial.print(CVVal);
         mySerial.print(" ");
       }
-      mySerial.print(CB_NUM_SETADDR);
+      mySerial.print(DEVICE_ID);
       mySerial.print(" ");
-      if (!flgWrite) mySerial.print(CB_READ_BYTE);
-      else mySerial.print(CB_WRITE_BYTE);
+      if (!flgWrite) bitWrite(tmp_CB_VAR, CB_READ_BYTE, 1);
+      else bitWrite(tmp_CB_VAR, CB_WRITE_BYTE, 1);
+      mySerial.print(tmp_CB_VAR);
       mySerial.print(">");
       lastCV = millis();
       lastDatas = DataTimeout + millis(); // dont get other datas
@@ -396,6 +400,7 @@ bool GetDecoderInfo(int CVNr, int CVVal) {
     }
     
     if (NextNr > 0) {
+      int tmp_CB_VAR = CB_NUM_GETINFO;
       if (!flgWrite) {
         updateCVMsg("Read");
         mySerial.print("<R ");
@@ -409,10 +414,11 @@ bool GetDecoderInfo(int CVNr, int CVVal) {
         mySerial.print(CVVal);
         mySerial.print(" ");
       }
-      mySerial.print(CB_NUM_GETINFO);
+      mySerial.print(DEVICE_ID);
       mySerial.print(" ");
-      if (!flgWrite) mySerial.print(CB_READ_BYTE);
-      else mySerial.print(CB_WRITE_BYTE);
+      if (!flgWrite) bitWrite(tmp_CB_VAR, CB_READ_BYTE, 1);
+      else bitWrite(tmp_CB_VAR, CB_WRITE_BYTE, 1);
+      mySerial.print(tmp_CB_VAR);
       mySerial.print(">");
       lastCV = millis();
       lastDatas = DataTimeout + millis(); // dont get other datas
