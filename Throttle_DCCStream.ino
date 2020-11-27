@@ -166,6 +166,7 @@ bool SetDecoderAddr(int CVNr, int CVVal) {
     
 }
 
+#if (defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560))
 bool GetDecoderInfo(int CVNr, int CVVal) {
   // all steps to get decoder Infos
     
@@ -436,3 +437,4 @@ bool GetDecoderInfo(int CVNr, int CVVal) {
     }
     
 }
+#endif

@@ -64,7 +64,7 @@ unsigned long PushKeyTimeout = 100;
 // Display I2C Address, use i2c_scanner, find out Address
 // Pins on Arduino Nano: A4 = SDA, A5 = SCL
 // Arduino Mega: D20 = SDA, D21 = SCL
-#define I2C_ADDR    0x3F
+#define I2C_ADDR   0x27 //0x3F
 
 
 #define debug 0           // set to 1 to show debug info on serial port - assume that it will cause issues with DCC++ depending on what is sent

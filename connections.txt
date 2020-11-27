@@ -7,6 +7,8 @@ GND - GND
 RXD - Arduino TX, Nano: D1, Mega: D18 (TXD1)
 TXD - Arduino RX, Nano: DO, Mega: D19 (RXD2)
 
+Config Tool: http://trainelectronics.com/Arduino/HC-12-Serial_Radio/
+
 
 Display 2004A
 -------------
@@ -15,6 +17,9 @@ VCC - +5V
 GND - GND
 SDA - Nano: A4, Mega: D20
 SCL - Nano: A5, Mega: D21
+
+-> get correct Settings i2_scanner
+#define I2C_ADDR   0x27 //0x3F
 
 
 4x5 Keypad

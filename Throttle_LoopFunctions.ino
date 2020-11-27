@@ -225,7 +225,9 @@ void loop_prog_key() {
         GetDecoderAddr(0,0);
       } else if (CVPROGMODE == 3) {
         //Decoder Info
-        GetDecoderInfo(0,0);
+        #if (defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560))
+          GetDecoderInfo(0,0);
+        #endif
       }
       break;
       

@@ -169,7 +169,9 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
                     if (SetDecoderAddr(p[2] * 10,p[3])) return;
                   } else if (p[0] == CB_NUM_GETINFO) {
                     //read decoder info
-                    if (GetDecoderInfo(p[2],p[3])) return;
+                    #if (defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560))
+                      if (GetDecoderInfo(p[2],p[3])) return;
+                    #endif
                   } else {
                     CVNumber = p[2];
                     CVVal = p[3];
@@ -194,10 +196,12 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
                 if (p[0] == CB_NUM_SETADDR) {
                   //read decoder adress
                   // if return == true, Address was read
-                  if (SetDecoderAddr(p[2],p[3])) return;
+                  if (SetDecoderAddr(p[2],p[3])) return;                
                 } else if (p[0] == CB_NUM_GETINFO) {
                   //read decoder info -> ESU must write
-                  if (GetDecoderInfo(p[2],p[3])) return;
+                  #if (defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560))
+                    if (GetDecoderInfo(p[2],p[3])) return;
+                  #endif
                 } else {
                   if (CVVal == p[3]) {
                     updateCVMsg("W:Ok");

@@ -4,7 +4,7 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-#define I2C_ADDR    0x3F
+#define I2C_ADDR   0x27 //0x3F
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #define printByte(args)  write(args);
