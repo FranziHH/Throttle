@@ -86,44 +86,46 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
     // Functions return from this switch if complete, break from switch implies error <X> to send
     switch(opcode) {
     case '\0': return;    // filterCallback asked us to ignore 
-    case 't':       // THROTTLE <t CAB SPEED DIRECTION FUNCTION_LOW FUNCTION_HIGH>
-        if (params == 5) {
-          int cab = p[0];
-          int speed = p[1];
-          int dir = p[2];
-          int i;
-          unsigned long func = (p[3] & 0xFFFF) + ((unsigned long)p[4] << 16);
-          bool found = false;
-          for (i = 0; i < maxLocos; i++) {
-            if (LocoAddress[i] == cab) {
-              found = true;
-              break;
+    case 't':       // THROTTLE <t CALLBACKNUM|CALLBACKSUB|CAB SPEED DIRECTION FUNCTION_LOW FUNCTION_HIGH>
+        if (params == 7) {
+          // CALLBACKSUB not used at time
+          if (p[0] == DEVICE_ID) {
+            int cab = p[2];
+            int speed = p[3];
+            int dir = p[4];
+            int i;
+            unsigned long func = (p[5] & 0xFFFF) + ((unsigned long)p[6] << 16);
+            bool found = false;
+            for (i = 0; i < maxLocos; i++) {
+              if (LocoAddress[i] == cab) {
+                found = true;
+                break;
+              }
             }
-          }
-          if (found) {
-            if (LocoDirection[i] != dir) {
-              LocoDirection[i] = dir;
-              LocoZeroCount[i] = reverse_direction;
-              doRefresh = true;
+            if (found) {
+              if (LocoDirection[i] != dir) {
+                LocoDirection[i] = dir;
+                LocoZeroCount[i] = reverse_direction;
+                doRefresh = true;
+              }
+              if (LocoSpeed[i] != speed) {
+                LocoSpeed[i] = speed;
+                doRefresh = true;
+              }
+              if (doRefresh && !CVPROG) updateSpeedsLCD(i);
+  
+              //Masked Out LocoPush
+              unsigned long mask_func = (~LocoPushFunction[i]) & func;
+              
+              if (LocoFunction[i] != mask_func) {
+                LocoFunction[i] = mask_func;
+                if ((ActiveAddress == i) && !CVPROG) InitialiseFunctionLCD();
+              }
+              re_absolute = LocoSpeed[ActiveAddress];
+              cmd_count--;
             }
-            if (LocoSpeed[i] != speed) {
-              LocoSpeed[i] = speed;
-              doRefresh = true;
-            }
-            if (doRefresh && !CVPROG) updateSpeedsLCD(i);
-
-            //Masked Out LocoPush
-            unsigned long mask_func = (~LocoPushFunction[i]) & func;
-            
-            if (LocoFunction[i] != mask_func) {
-              LocoFunction[i] = mask_func;
-              if ((ActiveAddress == i) && !CVPROG) InitialiseFunctionLCD();
-            }
-            re_absolute = LocoSpeed[ActiveAddress];
-            cmd_count--;
           }
           return;
-          
         }
         break;
 

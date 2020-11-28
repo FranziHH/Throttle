@@ -1,4 +1,4 @@
-/*
+                                                                                                              /*
   Mark Fox's DCC++ 'Bodnar Throttle'.  I think I might brand it a 'Bodnar'.  :)
   Rewritten and customised from Dave Bodnar's code from June 16th, 2016, his version 2.6a
   Version 1.00 uses an Arduino MEGA2560 (devboard) with a 4x4 keypad, 20x4 I2C LCD Display, and uses digital debouncing on the KY-040 rotary encoder without an interrupt.
@@ -146,6 +146,7 @@ const int CB_NUM_DEFAULT = 1;
 const int CB_NUM_GETADDR = 2;   //GetAddress
 const int CB_NUM_SETADDR = 3;   //SetAddress
 const int CB_NUM_GETINFO = 4;   //Get Decoder Info
+const int CB_NUM_GETLOCODATA = 5;   //Get LocoData
 const int CB_READ_BYTE = 10;    // Bit 10 is set
 const int CB_WRITE_BYTE = 11;   // Bit 11 is set
 

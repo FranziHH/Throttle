@@ -268,6 +268,7 @@ void all2ZeroSpeed() {
 
 void GetLocoDatas() {
   /* Gets Data from ussed locos */
+  // Format is: <G CV BIT VALUE CALLBACKNUM CALLBACKSUB>
   mySerial.print("<G");
   for (int tempx = 0; tempx < maxLocos; tempx++) {
     if (LocoInUse[tempx]) {
@@ -275,6 +276,10 @@ void GetLocoDatas() {
       mySerial.print(LocoAddress[tempx]);
     }
   }
+  mySerial.print(" ");
+  mySerial.print(DEVICE_ID);
+  mySerial.print(" ");
+  mySerial.print(CB_NUM_GETLOCODATA);
   mySerial.write(">");
   cmd_count++;
 }
