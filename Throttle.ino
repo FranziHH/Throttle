@@ -59,6 +59,7 @@ bool isSDCARD = false;
 
 #define maxLocos 4
 #define reverse_direction 5 // counts rotary encoder at zero to reverse direction
+#define reverse_timeout 1000
 
 #define RE_CLK    A0
 #define RE_DATA   A1
@@ -107,6 +108,7 @@ int LocoAddress[maxLocos] = {1111, 2222, 3333, 4444};
 int LocoDirection[maxLocos] = {1, 1, 1, 1};
 int LocoSpeed[maxLocos] = {0, 0, 0, 0};
 int LocoZeroCount[maxLocos] = {reverse_direction, reverse_direction, reverse_direction, reverse_direction};
+unsigned long LocoZeroTimeout[maxLocos] = {0, 0, 0, 0};
 bool LocoInUse[maxLocos] = {false, false, false, false};
 unsigned long LocoFunction[maxLocos] = {0, 0, 0, 0};
 unsigned long LocoPushFunction[maxLocos] = {0, 0, 0, 0};
@@ -307,8 +309,9 @@ void loop() {
       re_absolute = constrain(re_absolute, 0, 126);
       LocoSpeed[ActiveAddress] = re_absolute;
       if (LocoSpeed[ActiveAddress] == 0) {
+        if (LocoZeroCount[ActiveAddress] == 0) LocoZeroTimeout[ActiveAddress] = millis();
         LocoZeroCount[ActiveAddress]++;
-        if (LocoZeroCount[ActiveAddress] > reverse_direction) {
+        if ((LocoZeroCount[ActiveAddress] > reverse_direction) || (millis() - LocoZeroTimeout[ActiveAddress]  > reverse_timeout)) {
           // Reverse direction...
           LocoDirection[ActiveAddress] = !LocoDirection[ActiveAddress];
         }

@@ -162,15 +162,16 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
               if (p[3] == -1) {
                 updateCVMsg("R:Err");
               } else {
-                updateCVMsg("R:Ok");
-
+                
                 String(CVVal).toCharArray(CVValArr, sizeof(CVValArr));
                 if (CVPROG) {
                   if (tmp_CB_VAR == CB_NUM_GETADDR) {
                     //read decoder adress
+                    updateCVMsg("R:Ok");
                     if (GetDecoderAddr(p[2],p[3])) return;
                   } else if (tmp_CB_VAR == CB_NUM_SETADDR) {
                     //read decoder adress
+                    updateCVMsg("R:Ok");
                     if (SetDecoderAddr(p[2] * 10,p[3])) return;
                   } else if (tmp_CB_VAR == CB_NUM_GETINFO) {
                     //read decoder info
@@ -178,6 +179,7 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
                       if (GetDecoderInfo(p[2],p[3])) return;
                     #endif
                   } else {
+                    updateCVMsg("R:Ok");
                     CVNumber = p[2];
                     CVVal = p[3];
                     updateCVLCD(CVVal, 2);
