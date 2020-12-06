@@ -309,7 +309,6 @@ void loop() {
       re_absolute = constrain(re_absolute, 0, 126);
       LocoSpeed[ActiveAddress] = re_absolute;
       if (LocoSpeed[ActiveAddress] == 0) {
-        if (LocoZeroCount[ActiveAddress] == 0) LocoZeroTimeout[ActiveAddress] = millis();
         LocoZeroCount[ActiveAddress]++;
         if ((LocoZeroCount[ActiveAddress] > reverse_direction) || (millis() - LocoZeroTimeout[ActiveAddress]  > reverse_timeout)) {
           // Reverse direction...
@@ -317,6 +316,7 @@ void loop() {
         }
       } else {
         LocoZeroCount[ActiveAddress] = 0;
+        LocoZeroTimeout[ActiveAddress] = millis();
       }
       doDCCspeed(ActiveAddress);
       updateSpeedsLCD(ActiveAddress);
@@ -336,14 +336,17 @@ void loop() {
           // LocoDirection[ActiveAddress] = !LocoDirection[ActiveAddress];
           // ... and set speed to zero (saves loco running away on slow decel/accel set in decoder.)
           if (LocoSpeed[ActiveAddress] == 0 && rotary_push_from_zero > 0) {
-            LocoSpeed[ActiveAddress] = LocoMaxSpeed[ActiveAddress];
-            re_absolute = rotary_push_from_zero;
+            if (track_power) {
+              LocoSpeed[ActiveAddress] = LocoMaxSpeed[ActiveAddress];
+              re_absolute = rotary_push_from_zero;
+            }
           } else if (LocoSpeed[ActiveAddress] > 0) {
             if (LocoSpeed[ActiveAddress] > dont_change_smaller) {
               LocoMaxSpeed[ActiveAddress] = LocoSpeed[ActiveAddress];
             }
             LocoSpeed[ActiveAddress] = 0;
             LocoZeroCount[ActiveAddress] = 0;
+            LocoZeroTimeout[ActiveAddress] = millis();
             re_absolute = 0;
           }
           

@@ -18,6 +18,7 @@ void loop_loco_key() {
           LocoSpeed[ActiveAddress] = 0;
           re_absolute = LocoSpeed[ActiveAddress];
           LocoZeroCount[ActiveAddress] = 0;
+          LocoZeroTimeout[ActiveAddress] = millis();
           //doDCCspeed(ActiveAddress);
           updateSpeedsLCD(ActiveAddress);
         } else {
