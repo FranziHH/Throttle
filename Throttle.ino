@@ -220,11 +220,13 @@ void setup() {
     getAddresses(1);  // read loco IDs from eeprom
     getPushFunctions(1); //read functions from eeprom
     getLastProg(1);
+    getLastSpeed(1);
   } else {
     // store default data
     saveAddresses(1);  // read loco IDs from eeprom
     savePushFunctions(1); //read functions from eeprom
     saveLastProg(1);
+    saveLastSpeed(1);
   }
   
   lcd.print("DCC++ Throttle");
@@ -343,6 +345,7 @@ void loop() {
           } else if (LocoSpeed[ActiveAddress] > 0) {
             if (LocoSpeed[ActiveAddress] > dont_change_smaller) {
               LocoMaxSpeed[ActiveAddress] = LocoSpeed[ActiveAddress];
+              saveLastSpeed(1);
             }
             LocoSpeed[ActiveAddress] = 0;
             LocoZeroCount[ActiveAddress] = 0;

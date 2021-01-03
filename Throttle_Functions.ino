@@ -204,11 +204,13 @@ void getLocoAddress() {
   // If all zeroes entered, return to original address (DCC++ doesn't handle 0.)
   if (total == 0) total = saveAddress;
   LocoAddress[ActiveAddress] = total;
+  LocoMaxSpeed[ActiveAddress] = rotary_push_from_zero;
   #if debug == 1
     Serial.print("Actually saving: ");
     Serial.println(total);
   #endif
   saveAddresses(1);
+  saveLastSpeed(1);
   updateSpeedsLCD(ActiveAddress);
 }
 

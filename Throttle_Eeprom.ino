@@ -15,6 +15,14 @@ void getAddresses(int offset) {
   }
 }
 
+void getLastSpeed(int offset) {
+  int next_addr = (2 * maxLocos) + (5 * maxLocos) + 2 + offset;
+  for (int i = 0; i < maxLocos; i++) {
+    LocoMaxSpeed[i] = EEPROM.read(i + next_addr);
+    if (LocoMaxSpeed[i] > 126) LocoMaxSpeed[i] = rotary_push_from_zero;
+  }
+}
+
 void getPushFunctions(int offset) {
   // read PushFunctions
   int next_addr = (2 * maxLocos) + offset;
@@ -47,6 +55,13 @@ bool hasData(int offset) {
 void saveLastProg(int offset) {
   int next_addr = (2 * maxLocos) + (5 * maxLocos) + offset;
   EEPROM.update(next_addr, CVPROGMODE);
+}
+
+void saveLastSpeed(int offset) {
+  int next_addr = (2 * maxLocos) + (5 * maxLocos) + 2 + offset;
+  for (int i = 0; i < maxLocos; i++) {
+    EEPROM.update((i + next_addr), LocoMaxSpeed[i]);
+  }
 }
 
 void saveAddresses(int offset) {
