@@ -16,7 +16,7 @@ void getAddresses(int offset) {
 }
 
 void getLastSpeed(int offset) {
-  int next_addr = (2 * maxLocos) + (5 * maxLocos) + 2 + offset;
+  int next_addr = (2 * maxLocos) + (5 * maxLocos) + (2 * maxLocos) + offset;
   for (int i = 0; i < maxLocos; i++) {
     LocoMaxSpeed[i] = EEPROM.read(i + next_addr);
     if (LocoMaxSpeed[i] > 126) LocoMaxSpeed[i] = rotary_push_from_zero;
@@ -58,7 +58,7 @@ void saveLastProg(int offset) {
 }
 
 void saveLastSpeed(int offset) {
-  int next_addr = (2 * maxLocos) + (5 * maxLocos) + 2 + offset;
+  int next_addr = (2 * maxLocos) + (5 * maxLocos) + (2 * maxLocos) + offset;
   for (int i = 0; i < maxLocos; i++) {
     EEPROM.update((i + next_addr), LocoMaxSpeed[i]);
   }

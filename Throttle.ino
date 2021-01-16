@@ -6,11 +6,11 @@
   Date 6th August 2020.
 
   Changes by Franziska Walter
-  2020-11-27
-  v2.2.5FW
+  2021-01-16
+  v2.2.6FW
 */
-#define VERSION "2.2.5FW"
-#define VDATE "2020-11-27"
+#define VERSION "2.2.6FW"
+#define VDATE "2021-01-16"
 
 #define DEVICE_ID 1     // Callback Id  -> each Device need other ID
 #define I2C_ADDR   0x27 // or 0x3F
@@ -82,10 +82,16 @@ unsigned long PushKeyTimeout = 100;
 #define debug 0           // set to 1 to show debug info on serial port - assume that it will cause issues with DCC++ depending on what is sent
 
 // https://maxpromer.github.io/LCD-Character-Creator/
-uint8_t zerodot[8] = {0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0};
-uint8_t onedot[8] = {0x0, 0xe, 0x1f, 0x1b, 0x1f, 0xe, 0x0};
-uint8_t pushdot[8] = {0x0, 0x0, 0xA, 0x4, 0xA, 0x0, 0x0};
-uint8_t trackoff[8] = {0x0e, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x0e, 0x00};
+uint8_t zerodot[8] = {0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, 0x00};
+uint8_t onedot[8] = {0x0, 0xe, 0x1f, 0x1b, 0x1f, 0xe, 0x0, 0x00};
+uint8_t pushdot[8] = {0x0, 0x0, 0xA, 0x4, 0xA, 0x0, 0x0, 0x00};
+// OLD
+uint8_t trackon[8] = {0x0e, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x0e, 0x00};
+
+// NEW: Track Main / Join
+uint8_t trackoff[8] = {0x1F, 0x11, 0x11, 0x0E, 0x11, 0x11, 0x1F, 0x00};
+uint8_t trackon_main[8] = {0x1F, 0x11, 0x11, 0x0E, 0x1f, 0x1f, 0x1F, 0x00};
+uint8_t trackon_join[8] = {0x1F, 0x1F, 0x1F, 0x0E, 0x1f, 0x1f, 0x1F, 0x00};
 
 // Setup Keypad variables
 #define ROWS 5 //Zeilen
@@ -104,6 +110,7 @@ byte colPins[COLS] = {5, 4, 3, 2};          //connect to the row pinouts of the 
 byte rowPins[ROWS] = {6, 7, 8, 9, 10};      //connect to the column pinouts of the keypad
 
 bool track_power = false;
+bool track_join = false;
 int LocoAddress[maxLocos] = {1111, 2222, 3333, 4444};
 int LocoDirection[maxLocos] = {1, 1, 1, 1};
 int LocoSpeed[maxLocos] = {0, 0, 0, 0};
@@ -201,8 +208,11 @@ void setup() {
   lcd.init();
   lcd.createChar(0, zerodot);
   lcd.createChar(1, onedot);
-  lcd.createChar(2, trackoff);
+  lcd.createChar(2, trackon);
   lcd.createChar(3, pushdot);
+  lcd.createChar(4, trackoff);
+  lcd.createChar(5, trackon_main);
+  lcd.createChar(6, trackon_join);
   lcd.home (); // go home
   mySerial.begin (115200);
   //#if debug > 0

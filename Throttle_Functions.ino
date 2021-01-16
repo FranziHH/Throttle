@@ -132,6 +132,24 @@ void doExtendedFunction(int counter, int newnumber) {
     // at direct access don't use 29 for delete
     doFunction(total);
   }
+
+  if (total == 29) {
+    // Toggle Join
+    if (track_power) {
+      track_join = !track_join;
+      // Join RAW switch only join status ....
+      if (track_join) {
+        mySerial.print("<1 JOINRAW>");
+      } else {
+        mySerial.print("<0 JOINRAW>");
+      }
+      UpdateFunctionLCD(29);
+      #if debug == 1
+        Serial.print("Join:");
+        Serial.print(track_join);
+      #endif
+    }
+  }
 }
 
 void doFunction(int fN) {

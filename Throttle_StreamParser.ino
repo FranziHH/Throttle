@@ -130,6 +130,14 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
         break;
 
      case 'p':
+//        if (params == 1) {  // <p0|1>
+//          cmd_count--;
+//          if (track_power != (bool) p[0]) {
+//            track_power = ! track_power;
+//            if (!CVPROG) UpdateFunctionLCD(29);
+//          }
+//          return;
+//        }
         if (params == 2) {
           switch (p[1]) {
            case HASH_KEYWORD_MAIN:
@@ -144,6 +152,11 @@ void StreamParser_parse(Print * stream,  byte *com, bool blocking) {
               return;
               
           case HASH_KEYWORD_JOIN:
+              cmd_count--;
+              if (track_join != (bool) p[0]) {
+                track_join = ! track_join;
+                if (!CVPROG) UpdateFunctionLCD(29);
+              }
               return;
           
           }

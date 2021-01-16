@@ -218,12 +218,7 @@ void InitialiseFunctionLCD() {
         //lcd.write(byte(bitRead(LocoFunction[ActiveAddress], n)));
       } else {
         // 29th location, hint that 29 will turn off all loco functions.
-        if (track_power) {
-          //lcd.print("X");
-          lcd.write(byte(2));
-        } else {
-          lcd.print("O");
-        }
+        UpdateFunctionLCD(29);
       }
 
     }
@@ -245,10 +240,13 @@ void UpdateFunctionLCD(int FN) {
   } else {
     // 29th location, hint that 29 will turn off all loco functions.
     if (track_power) {
-      //lcd.print("X");
-      lcd.write(byte(2));
+      if (track_join) {
+        lcd.write(byte(6)); // join
+      } else {
+        lcd.write(byte(5)); // main
+      }
     } else {
-      lcd.print("O");
+      lcd.write(byte(4)); // off
     }
   }
   lcd.setCursor(4, ActiveAddress);
@@ -272,7 +270,12 @@ void UpdateCVModusLCD(bool force) {
       UpdateCVModus = 1;
       if (UpdateCVModus != lastUpdateCVModus) {
         lcd.setCursor(0, 3);
-        lcd.write(byte(2));
+        //lcd.write(byte(2));
+        if (track_join) {
+          lcd.write(byte(6)); // join
+        } else {
+          lcd.write(byte(5)); // main
+        }
         lcd.setCursor(CVCol, CVLine);
         lastUpdateCVModus = UpdateCVModus;
       }
@@ -280,7 +283,8 @@ void UpdateCVModusLCD(bool force) {
       UpdateCVModus = 2;
       if (UpdateCVModus != lastUpdateCVModus) {
         lcd.setCursor(0, 3);
-        lcd.print("O");
+        //lcd.print("O");
+        lcd.createChar(4, trackoff);
         lcd.setCursor(CVCol, CVLine);
         lastUpdateCVModus = UpdateCVModus;
       }
