@@ -173,6 +173,7 @@ void loop_prog_key() {
       break;
       
     case 'P': //Ent
+      track_power = !track_power;
       if (track_power) {
         mySerial.print("<1 MAIN>");
       } else {
