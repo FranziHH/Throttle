@@ -319,10 +319,11 @@ void loop() {
     if (CVPROG == false) {
       re_absolute += re_val;
       re_absolute = constrain(re_absolute, 0, 126);
+      int tmpLocoSpeed = LocoSpeed[ActiveAddress];
       LocoSpeed[ActiveAddress] = re_absolute;
       if (LocoSpeed[ActiveAddress] == 0) {
         LocoZeroCount[ActiveAddress]++;
-        if ((LocoZeroCount[ActiveAddress] > reverse_direction) || (millis() - LocoZeroTimeout[ActiveAddress]  > reverse_timeout)) {
+        if ((LocoZeroCount[ActiveAddress] > reverse_direction) || ((millis() - LocoZeroTimeout[ActiveAddress]  > reverse_timeout) && tmpLocoSpeed == 0)) {
           // Reverse direction...
           LocoDirection[ActiveAddress] = !LocoDirection[ActiveAddress];
         }

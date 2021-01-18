@@ -86,7 +86,7 @@ Value;Manufacturer;CV-Type;CV-Version;CV-Subversion;CV-Build;ExtFile
 94;Electroniscript, Inc.;;;;;
 95;Sanda Kan Industrial, Ltd.;;;;;
 96;PRICOM Design;;;;;
-97;D&H;261;262;264;;DH.csv
+97;D&H;261;262;264;265;DH.csv
 98;Harman DCC;;;;;
 99;Lenz;;;;;
 100;Trenes Digitales;;;;;
